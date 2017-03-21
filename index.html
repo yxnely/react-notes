@@ -13,18 +13,14 @@
         <script type="text/babel">
         var Note = React.createClass({
             getInitialState() {
-                {/* Create a state and set its value */}
                 return {editing: false}
             },
             edit() {
-                {/* Set editing state to true */}
                 this.setState({editing: true})
             },
             save() {
-                {/* Access the html element */}
                 var val = this.refs.newText.value
                 var id = this.props.id
-                {/* Set state back to false */}
                 this.props.onChange(val, id);
                 this.setState({editing: false})
             },
@@ -34,7 +30,6 @@
             renderForm() {
                 return (
                     <div className="note">
-                        {/* Add a ref to reference the html textarea element */}
                         <textarea ref='newText'></textarea>
                         <button onClick={this.save}>Save</button>
                     </div>
@@ -45,7 +40,6 @@
                     <div className="note">
                         <p>{this.props.children}</p>
                         <span>
-                            {/* Adding event listeners, clicks */}
                             <button onClick={this.edit}>Edit</button>
                             <button onClick={this.remove}>X</button>
                         </span>
@@ -53,7 +47,6 @@
                 )
             },
             render() {
-                {/* If check to render textarea or div */}
                 return (this.state.editing) ? this.renderForm()
                                             : this.renderDisplay()
             }
@@ -73,13 +66,23 @@
             },
             getInitialState() {
                 return {
-                    notes: [
-                        {id: 0, note: 'call bob'},
-                        {id: 1, note: 'email sarah'},
-                        {id: 2, note: 'eat lunch'},
-                        {id: 3, note: 'finish proposal'}
-                    ]
+                    notes: []
                 }
+            },
+            nextId() {
+                this.uniqueId = this.uniqueId || 0
+                return this.uniqueId++
+            },
+            add(text) {
+                var notes = [
+                    ...this.state.notes,
+                    {
+                        id: this.nextId(),
+                        note: text
+                    }
+                ]
+
+                this.setState({notes})
             },
             update(newText, id) {
                 var notes = this.state.notes.map(
@@ -92,7 +95,7 @@
                 this.setState({notes})
             },
             remove(id) {
-                var notes = this.state.notes.filter(note => note !== id)
+                var notes = this.state.notes.filter(note => note.id !== id)
                 this.setState({notes})
             },
             eachNote(note) {
@@ -107,6 +110,7 @@
                 return (
                     <div className='board'>
                         {this.state.notes.map(this.eachNote)}
+                        <button onClick={() => this.add('New Note')}>+</button>
                     </div>
                 )
             }
