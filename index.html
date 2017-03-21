@@ -13,13 +13,17 @@
         <script type="text/babel">
         var Note = React.createClass({
             getInitialState() {
+                // Create a state and set its value
                 return {editing: false}
             },
             edit() {
-                console.log(this);
+                // Set editing state to true
                 this.setState({editing: true})
             },
             save() {
+                // Access the html element
+                var val = this.refs.newText.value
+                // Set state back to false
                 this.setState({editing: false})
             },
             remove() {
@@ -27,8 +31,10 @@
             },
             renderForm() {
                 return (
+                    // Add a class for the CSS
                     <div className="note">
-                        <textarea></textarea>
+                        // Add a ref to reference the html textarea element
+                        <textarea ref='newText'></textarea>
                         <button onClick={this.save}>Save</button>
                     </div>
                 )
@@ -38,6 +44,7 @@
                     <div className="note">
                         <p>{this.props.children}</p>
                         <span>
+                            // Adding event listeners, clicks
                             <button onClick={this.edit}>Edit</button>
                             <button onClick={this.remove}>X</button>
                         </span>
@@ -45,12 +52,23 @@
                 )
             },
             render() {
+                // If check to render textarea or div
                 return (this.state.editing) ? this.renderForm()
                                             : this.renderDisplay()
             }
         })
 
-        ReactDOM.render(<Note>Hello World</Note>, document.getElementById('react-container'));
+        var Board = React.createClass({
+            render() {
+                return (
+                    <div className='board'>
+                        {this.props.count}
+                    </div>
+                )
+            }
+        })
+
+        ReactDOM.render(<Board count={10}></Board>, document.getElementById('react-container'));
         </script>
     </body>
 </html>
