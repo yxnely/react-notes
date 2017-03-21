@@ -11,29 +11,53 @@
     <body>
         <div id='react-container'></div>
         <script type="text/babel">
-        var Note = React.createClass({
-            edit() {
-                alert('editing note')
+        // var Note = React.createClass({
+        //     edit() {
+        //         alert('editing note')
+        //     },
+        //     remove() {
+        //         alert('removing note')
+        //     },
+        //     render() {
+        //         return (
+        //             <div className="note">
+        //                 <p>{this.props.children}</p>
+        //                 <span>
+        //                     <button onClick={this.edit}>Edit</button>
+        //                     <button onClick={this.remove}>X</button>
+        //                 </span>
+        //             </div>
+        //         )
+        //     }
+        // })
+
+        // ReactDOM.render(<Note>Hello World</Note>, document.getElementById('react-container'));
+
+
+        var Checkbox = React.createClass({
+            getInitialState() {
+                return { checked: true }
             },
-            remove() {
-                alert('removing note')
+            handleCheck() {
+                this.setState({checked: !this.state.checked});
             },
             render() {
+                var msg
+                if (this.state.checked) {
+                    msg = 'checked'
+                } else {
+                    msg = 'unchecked'
+                }
                 return (
-                    <div className="note">
-                        <p>
-
-                        </p>
-                        <span>
-                            <button onClick={this.edit}>Edit</button>
-                            <button onClick={this.remove}>X</button>
-                        </span>
+                    <div>
+                        <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.checked} />
+                        <p>This box is {msg}</p>
                     </div>
                 )
             }
         })
 
-        ReactDOM.render(<Note></Note>, document.getElementById('react-container'));
+        ReactDOM.render(<Checkbox></Checkbox>, document.getElementById('react-container'));
         </script>
     </body>
 </html>
