@@ -12,6 +12,12 @@
         <div id='react-container'></div>
         <script type="text/babel">
         var Note = React.createClass({
+            edit() {
+                alert('editing note')
+            },
+            remove() {
+                alert('removing note')
+            },
             render() {
                 return (
                     <div className="note">
@@ -19,8 +25,8 @@
 
                         </p>
                         <span>
-                            <button>Edit</button>
-                            <button>X</button>
+                            <button onClick={this.edit}>Edit</button>
+                            <button onClick={this.remove}>X</button>
                         </span>
                     </div>
                 )
