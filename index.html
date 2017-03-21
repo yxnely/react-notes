@@ -13,27 +13,28 @@
         <script type="text/babel">
         var Note = React.createClass({
             getInitialState() {
-                // Create a state and set its value
+                {/* Create a state and set its value */}
                 return {editing: false}
             },
             edit() {
-                // Set editing state to true
+                {/* Set editing state to true */}
                 this.setState({editing: true})
             },
             save() {
-                // Access the html element
+                {/* Access the html element */}
                 var val = this.refs.newText.value
-                // Set state back to false
+                var id = this.props.id
+                {/* Set state back to false */}
+                this.props.onChange(val, id);
                 this.setState({editing: false})
             },
             remove() {
-                alert('removing note')
+                this.props.onRemove(this.props.id)
             },
             renderForm() {
                 return (
-                    // Add a class for the CSS
                     <div className="note">
-                        // Add a ref to reference the html textarea element
+                        {/* Add a ref to reference the html textarea element */}
                         <textarea ref='newText'></textarea>
                         <button onClick={this.save}>Save</button>
                     </div>
@@ -44,7 +45,7 @@
                     <div className="note">
                         <p>{this.props.children}</p>
                         <span>
-                            // Adding event listeners, clicks
+                            {/* Adding event listeners, clicks */}
                             <button onClick={this.edit}>Edit</button>
                             <button onClick={this.remove}>X</button>
                         </span>
@@ -52,15 +53,13 @@
                 )
             },
             render() {
-                // If check to render textarea or div
+                {/* If check to render textarea or div */}
                 return (this.state.editing) ? this.renderForm()
                                             : this.renderDisplay()
             }
         })
 
         var Board = React.createClass({
-            // Optional feature
-            //
             propTypes: {
                 count: function (props, propName) {
                     if (typeof props[propName] !== 'number') {
@@ -75,19 +74,39 @@
             getInitialState() {
                 return {
                     notes: [
-                        'call bob',
-                        'email sarah',
-                        'eat lunch',
-                        'finish proposal'
+                        {id: 0, note: 'call bob'},
+                        {id: 1, note: 'email sarah'},
+                        {id: 2, note: 'eat lunch'},
+                        {id: 3, note: 'finish proposal'}
                     ]
                 }
+            },
+            update(newText, id) {
+                var notes = this.state.notes.map(
+                    note => (note.id !== id) ?
+                    note: {
+                        ...note,
+                        note: newText
+                    }
+                )
+                this.setState({notes})
+            },
+            remove(id) {
+                var notes = this.state.notes.filter(note => note !== id)
+                this.setState({notes})
+            },
+            eachNote(note) {
+                return (<Note key={note.id}
+                            id={note.id}
+                            onChange={this.update}
+                            onRemove={this.remove}>
+                        {note.note}
+                    </Note>)
             },
             render() {
                 return (
                     <div className='board'>
-                        {this.state.notes.map((note, i) => {
-                            return <Note key={i}>{note}</Note>
-                        })}
+                        {this.state.notes.map(this.eachNote)}
                     </div>
                 )
             }
